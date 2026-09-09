@@ -3,171 +3,417 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UTC March Sync Calculator</title>
+
+<title>Rally Sync ♡</title>
 
 <style>
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #eef8ff;
-  padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 10%, #3b1635 0%, transparent 30%),
+        radial-gradient(circle at 80% 90%, #40133b 0%, transparent 30%),
+        #0d050c;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* ✨ Sparkles */
+body::before,
+body::after {
+    content: "✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧";
+    position: fixed;
+    width: 100%;
+    left: 0;
+    color: #ff9de2;
+    font-size: 18px;
+    letter-spacing: 28px;
+    opacity: .35;
+    pointer-events: none;
+    animation: sparkle 5s linear infinite;
+}
+
+body::before {
+    top: 8%;
+}
+
+body::after {
+    top: 75%;
+    animation-delay: 2s;
+}
+
+@keyframes sparkle {
+    0% {
+        transform: translateX(-20px);
+        opacity: .15;
+    }
+
+    50% {
+        opacity: .7;
+    }
+
+    100% {
+        transform: translateX(20px);
+        opacity: .15;
+    }
 }
 
 .container {
-  max-width: 700px;
-  margin: auto;
+    max-width: 720px;
+    margin: auto;
 }
 
-.card {
-  background: #000;
-  border: 1px solid #00bfff;
-  position: relative;
-  overflow: hidden;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow:
-    0 0 18px #00bfff44,
-    inset 0 0 20px #00bfff0d;
-}
+/* HEADER */
 
 h1 {
-  margin: 0 0 6px;
-  text-align: center;
-  font-size: 25px;
+    text-align: center;
+    margin: 5px 0;
+    color: #ffb7e8;
+    font-size: 32px;
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 8px #ff4fc3,
+        0 0 20px #ff4fc3;
 }
 
-.sub {
-  text-align: center;
-  color: #9fc2d6;
-  margin-bottom: 18px;
+.subtitle {
+    text-align: center;
+    color: #d98ac4;
+    margin-bottom: 25px;
 }
 
-.clock {
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  letter-spacing: 2px;
+/* CARD */
 
-  background: #000;
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 18px;
+.card {
+    background: rgba(24, 8, 21, .94);
+    border: 1px solid #ff4fc3;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 18px;
 
-  text-shadow: 0 0 10px #00bfff;
+    box-shadow:
+        0 0 12px rgba(255, 79, 195, .25),
+        inset 0 0 20px rgba(255, 79, 195, .04);
 }
 
-label {
-  display: block;
-  margin: 10px 0 6px;
-  color: #b9d6e6;
-}
+/* PLAYER INPUT */
 
 .row {
-  display: grid;
-  grid-template-columns: 1fr 130px 45px;
-  gap: 8px;
-  margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: 1fr 125px 42px 42px 42px;
+    gap: 7px;
+    margin-bottom: 11px;
+    align-items: center;
 }
 
 input {
-  width: 100%;
-  padding: 12px;
+    width: 100%;
+    padding: 12px;
 
-  border-radius: 9px;
-  border: 1px solid #315a70;
+    border-radius: 10px;
+    border: 1px solid #71325f;
 
-  background: #000;
-  color: white;
+    background: #170914;
+    color: white;
 
-  font-size: 16px;
-  outline: none;
+    font-size: 16px;
+    outline: none;
 }
 
 input:focus {
-  border-color: #00bfff;
-  box-shadow: 0 0 8px #00bfff44;
+    border-color: #ff72ce;
+
+    box-shadow:
+        0 0 8px rgba(255, 114, 206, .35);
 }
+
+/* BUTTONS */
 
 button {
-  border: 0;
-  border-radius: 9px;
-  padding: 11px 14px;
+    border: none;
+    border-radius: 10px;
 
-  font-size: 15px;
-  font-weight: bold;
+    padding: 11px;
 
-  cursor: pointer;
-  color: white;
-  background: #176b91;
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .15s;
 }
 
-button:hover {
-  filter: brightness(1.15);
+button:active {
+    transform: scale(.92);
 }
 
-.remove {
-  background: #8c3040;
-  padding: 0;
-  font-size: 18px;
+/* +1 / -1 */
+
+.plus,
+.minus {
+    background: #35102d;
+    color: #ff9cde;
+
+    border: 1px solid #9d3b80;
+
+    box-shadow:
+        0 0 6px rgba(255, 80, 190, .2);
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 14px;
+.plus:hover,
+.minus:hover {
+    background: #ff4fc3;
+    color: #16000e;
+
+    box-shadow:
+        0 0 12px #ff4fc3;
 }
 
-.actions button {
-  flex: 1;
-  min-width: 130px;
+/* DELETE */
+
+.delete {
+    background: #24101f;
+    color: #ff6f9d;
+
+    border: 1px solid #6c294f;
 }
+
+.delete:hover {
+    background: #ff4f8b;
+    color: #21000f;
+}
+
+/* ADD */
+
+.add {
+    width: 100%;
+
+    background: #241021;
+    color: #ffb7e8;
+
+    border: 1px solid #8e3976;
+
+    margin-top: 5px;
+}
+
+.add:hover {
+    background: #32142e;
+}
+
+/* CALCULATE */
 
 .calculate {
-  background: #13855f;
+    width: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff4fc3,
+            #ff8dd8
+        );
+
+    color: #210018;
+
+    margin-top: 10px;
+
+    font-size: 17px;
+
+    box-shadow:
+        0 0 15px rgba(255, 79, 195, .4);
 }
 
-.copy {
-  background: #8a6916;
+.calculate:hover {
+    box-shadow:
+        0 0 25px rgba(255, 79, 195, .7);
 }
+
+/* RESULT */
 
 .result {
-  margin-top: 18px;
-
-  background: #000;
-  border: 1px solid #00bfff;
-
-  border-radius: 12px;
-  padding: 15px;
-
-  display: none;
-
-  box-shadow: 0 0 12px #00bfff22;
+    display: none;
 }
 
-pre {
-  margin: 0;
-  white-space: pre-wrap;
+.hit {
+    text-align: center;
 
-  font-family: Consolas, monospace;
-  font-size: 17px;
-  line-height: 1.65;
+    font-size: 23px;
+    font-weight: bold;
 
-  color: #00bfff;
-  text-shadow: 0 0 7px #00bfff;
+    margin-bottom: 18px;
+    padding: 15px;
+
+    border: 1px solid #ff6dcc;
+    border-radius: 12px;
+
+    color: #ff9ddd;
+
+    background:
+        rgba(255, 79, 195, .06);
+
+    text-shadow:
+        0 0 10px #ff4fc3;
 }
 
-.info {
-  font-size: 13px;
-  color: #8eafc0;
-  text-align: center;
-  margin-top: 12px;
+.result-row {
+    display: grid;
+
+    grid-template-columns: 1fr 120px;
+
+    gap: 10px;
+
+    padding: 13px 8px;
+
+    border-bottom:
+        1px solid #3b1834;
+
+    align-items: center;
+}
+
+.result-header {
+    color: #a96c9b;
+    font-size: 13px;
+}
+
+.time {
+    color: #ff91d8;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 7px #ff4fc3;
+}
+
+/* COPY */
+
+.copy {
+    width: 100%;
+
+    background: #291024;
+
+    color: #ff9ddd;
+
+    border: 1px solid #a23d83;
+
+    margin-top: 15px;
+
+    font-size: 17px;
+}
+
+.copy:hover {
+    background: #ff4fc3;
+    color: #210018;
+}
+
+/* COPY BOX */
+
+.copyBox {
+    position: fixed;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 90%;
+    max-width: 500px;
+
+    background: #170914;
+
+    border: 2px solid #ff4fc3;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    z-index: 9999;
+
+    box-shadow:
+        0 0 30px rgba(255, 79, 195, .5);
+}
+
+.copyBox textarea {
+    width: 100%;
+
+    min-height: 180px;
+
+    resize: none;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid #a23d83;
+
+    background: #0d050c;
+
+    color: #ffb7e8;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.closeCopy {
+    width: 100%;
+
+    margin-top: 10px;
+
+    background: #ff4fc3;
+
+    color: #210018;
+}
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+
+    color: #8c557e;
+
+    font-size: 12px;
+
+    margin-top: 20px;
+}
+
+/* MOBILE */
+
+@media (max-width: 550px) {
+
+    body {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .row {
+        grid-template-columns:
+            1fr 82px 36px 36px 36px;
+
+        gap: 5px;
+    }
+
+    .row button {
+        padding: 10px 4px;
+    }
+
+    .result-row {
+        grid-template-columns:
+            1fr 85px;
+
+        font-size: 14px;
+    }
 }
 </style>
 </head>
@@ -176,260 +422,738 @@ pre {
 
 <div class="container">
 
-  <div class="card">
+    <h1>♡ RALLY SYNC ♡</h1>
 
-    <h1>🌐 UTC March Sync Calculator</h1>
-
-    <div class="sub">
-      Set the arrival time automatically to the next full UTC minute
+    <div class="subtitle">
+        ✨ Pink Sparkle Edition ✨
     </div>
 
-    <div class="clock" id="clock">
-      00:00:00 UTC
-    </div>
 
-    <label>
-      Players & March Duration
-    </label>
+    <!-- INPUT CARD -->
 
-    <div id="players"></div>
+    <div class="card">
 
-    <div class="actions">
+        <div id="players">
 
-      <button onclick="addPlayer()">
-        ＋ Add Player
-      </button>
+            <div class="row">
 
-      <button class="calculate" onclick="calculate()">
-        ⚡ Calculate
-      </button>
+                <input
+                    type="text"
+                    placeholder="Player name"
+                    oninput="autoCalculate()"
+                >
 
-    </div>
+                <input
+                    type="number"
+                    placeholder="Seconds"
+                    min="0"
+                    oninput="autoCalculate()"
+                >
 
-    <div class="result" id="resultBox">
+                <button
+                    class="minus"
+                    onclick="changeTime(this, -1)"
+                >
+                    −1
+                </button>
 
-      <pre id="results"></pre>
+                <button
+                    class="plus"
+                    onclick="changeTime(this, 1)"
+                >
+                    +1
+                </button>
 
-      <div class="actions">
+                <button
+                    class="delete"
+                    onclick="removePlayer(this)"
+                >
+                    ×
+                </button>
 
-        <button class="copy" onclick="copyResults()">
-          📋 Copy Results
+            </div>
+
+
+            <div class="row">
+
+                <input
+                    type="text"
+                    placeholder="Player name"
+                    oninput="autoCalculate()"
+                >
+
+                <input
+                    type="number"
+                    placeholder="Seconds"
+                    min="0"
+                    oninput="autoCalculate()"
+                >
+
+                <button
+                    class="minus"
+                    onclick="changeTime(this, -1)"
+                >
+                    −1
+                </button>
+
+                <button
+                    class="plus"
+                    onclick="changeTime(this, 1)"
+                >
+                    +1
+                </button>
+
+                <button
+                    class="delete"
+                    onclick="removePlayer(this)"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="add"
+            onclick="addPlayer()"
+        >
+            ✨ ＋ Add Player ✨
         </button>
 
-      </div>
+
+        <button
+            class="calculate"
+            onclick="calculate()"
+        >
+            💗 CALCULATE 💗
+        </button>
 
     </div>
 
-    <div class="info">
-      Format: 00.SS • Examples: 00.15, 00.26
+
+    <!-- RESULTS -->
+
+    <div
+        class="card result"
+        id="result"
+    >
+
+        <div class="hit">
+
+            ✨ HIT TIME:
+
+            <span id="hitTime">
+                00:00
+            </span>
+
+            ✨
+
+        </div>
+
+
+        <div class="result-row result-header">
+
+            <div>
+                PLAYER
+            </div>
+
+            <div style="text-align:center">
+                START
+            </div>
+
+        </div>
+
+
+        <div id="results"></div>
+
+
+        <button
+            class="copy"
+            onclick="copyResults()"
+        >
+            📋 COPY RESULTS
+        </button>
+
     </div>
 
-  </div>
+
+    <div class="footer">
+        ♡ Made for synchronized rallies ♡
+    </div>
 
 </div>
 
+
 <script>
 
-const players = document.getElementById("players");
+let lastResults = [];
 
-function addPlayer(name = "", march = "") {
 
-  const row = document.createElement("div");
+/* ADD PLAYER */
 
-  row.className = "row";
+function addPlayer() {
 
-  row.innerHTML = `
-    <input
-      class="name"
-      placeholder="Player name"
-      value="${escapeHtml(name)}"
-    >
+    const players =
+        document.getElementById("players");
 
-    <input
-      class="march"
-      type="number"
-      min="0"
-      max="3600"
-      placeholder="Seconds"
-      value="${march}"
-    >
+    const row =
+        document.createElement("div");
 
-    <button
-      class="remove"
-      onclick="this.parentElement.remove()"
-    >
-      ×
-    </button>
-  `;
+    row.className = "row";
 
-  players.appendChild(row);
+    row.innerHTML = `
+
+        <input
+            type="text"
+            placeholder="Player name"
+            oninput="autoCalculate()"
+        >
+
+        <input
+            type="number"
+            placeholder="Seconds"
+            min="0"
+            oninput="autoCalculate()"
+        >
+
+        <button
+            class="minus"
+            onclick="changeTime(this, -1)"
+        >
+            −1
+        </button>
+
+        <button
+            class="plus"
+            onclick="changeTime(this, 1)"
+        >
+            +1
+        </button>
+
+        <button
+            class="delete"
+            onclick="removePlayer(this)"
+        >
+            ×
+        </button>
+    `;
+
+    players.appendChild(row);
 }
 
-function escapeHtml(s) {
 
-  return String(s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+/* DELETE PLAYER */
+
+function removePlayer(button) {
+
+    const rows =
+        document.querySelectorAll(
+            "#players .row"
+        );
+
+    if (rows.length <= 1) {
+        return;
+    }
+
+    button.parentElement.remove();
+
+    autoCalculate();
 }
 
-function updateClock() {
 
-  const now = new Date();
+/* +1 / -1 */
 
-  const h = now.getUTCHours()
-    .toString()
-    .padStart(2, "0");
+function changeTime(button, amount) {
 
-  const m = now.getUTCMinutes()
-    .toString()
-    .padStart(2, "0");
+    const input =
+        button.parentElement.children[1];
 
-  const s = now.getUTCSeconds()
-    .toString()
-    .padStart(2, "0");
+    let value =
+        Number(input.value) || 0;
 
-  document.getElementById("clock").textContent =
-    `${h}:${m}:${s} UTC`;
+    value += amount;
+
+    if (value < 0) {
+        value = 0;
+    }
+
+    input.value = value;
+
+    calculate();
 }
 
-setInterval(updateClock, 1000);
 
-updateClock();
+/* FORMAT TIME */
+
+function formatTime(seconds) {
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const secs =
+        seconds % 60;
+
+    return (
+        String(minutes).padStart(2, "0")
+        +
+        ":"
+        +
+        String(secs).padStart(2, "0")
+    );
+}
+
+
+/* CALCULATE */
 
 function calculate() {
 
-  const rows = [
-    ...document.querySelectorAll(".row")
-  ];
+    const rows =
+        document.querySelectorAll(
+            "#players .row"
+        );
 
-  if (!rows.length) {
+    let players = [];
 
-    alert("Add at least one player.");
 
-    return;
-  }
+    rows.forEach(row => {
 
-  const now = new Date();
+        const name =
+            row.children[0]
+                .value
+                .trim();
 
-  const target = new Date(now);
+        const seconds =
+            Number(
+                row.children[1].value
+            );
 
-  target.setUTCSeconds(0, 0);
 
-  target.setUTCMinutes(
-    target.getUTCMinutes() + 1
-  );
+        if (
+            name !== "" &&
+            !isNaN(seconds) &&
+            seconds >= 0
+        ) {
 
-  let output = [];
+            players.push({
 
-  for (const row of rows) {
+                name: name,
 
-    const name =
-      row.querySelector(".name")
-        .value
-        .trim();
+                duration: seconds
 
-    const march =
-      parseInt(
-        row.querySelector(".march").value,
-        10
-      );
+            });
 
-    if (!name) {
-      continue;
+        }
+
+    });
+
+
+    if (players.length === 0) {
+
+        document.getElementById(
+            "result"
+        ).style.display = "none";
+
+        return;
     }
 
-    if (!Number.isFinite(march) || march < 0) {
 
-      alert(
-        `Enter a valid march time for ${name}.`
-      );
+    /*
+       أطول مسيرة تبدأ عند 00:00
 
-      return;
-    }
+       Start =
+       Longest - Player Duration
+    */
 
-    const launch = new Date(
-      target.getTime() - march * 1000
+    const longest =
+        Math.max(
+            ...players.map(
+                player =>
+                    player.duration
+            )
+        );
+
+
+    /* الأطول أولاً */
+
+    players.sort(
+        (a, b) =>
+            b.duration - a.duration
     );
 
-    const ss =
-      launch
-        .getUTCSeconds()
-        .toString()
-        .padStart(2, "0");
 
-    output.push(
-      `${name.padEnd(10, " ")} 00.${ss}`
-    );
-  }
+    const results =
+        document.getElementById(
+            "results"
+        );
 
-  if (!output.length) {
+    results.innerHTML = "";
 
-    alert(
-      "Enter at least one player name."
-    );
+    lastResults = [];
 
-    return;
-  }
 
-  document.getElementById("results")
-    .textContent =
-    output.join("\n");
+    players.forEach(player => {
 
-  document.getElementById("resultBox")
-    .style.display = "block";
+        const startTime =
+            longest -
+            player.duration;
+
+
+        lastResults.push({
+
+            name: player.name,
+
+            time:
+                formatTime(startTime)
+
+        });
+
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "result-row";
+
+
+        row.innerHTML = `
+
+            <div>
+                ♡ ${escapeHTML(player.name)}
+            </div>
+
+            <div class="time">
+                ${formatTime(startTime)}
+            </div>
+
+        `;
+
+
+        results.appendChild(row);
+
+    });
+
+
+    document.getElementById(
+        "hitTime"
+    ).textContent =
+        formatTime(longest);
+
+
+    document.getElementById(
+        "result"
+    ).style.display = "block";
 }
 
-async function copyResults() {
 
-  const text =
-    document.getElementById("results")
-      .textContent;
+/* AUTO CALCULATE */
 
-  try {
+function autoCalculate() {
 
-    await navigator.clipboard.writeText(text);
+    const rows =
+        document.querySelectorAll(
+            "#players .row"
+        );
 
-    const btn =
-      document.querySelector(".copy");
+    let hasData = false;
 
-    const old =
-      btn.textContent;
 
-    btn.textContent =
-      "✅ Copied!";
+    rows.forEach(row => {
+
+        const name =
+            row.children[0]
+                .value
+                .trim();
+
+        const seconds =
+            Number(
+                row.children[1].value
+            );
+
+
+        if (
+            name !== "" &&
+            !isNaN(seconds)
+        ) {
+
+            hasData = true;
+
+        }
+
+    });
+
+
+    if (hasData) {
+        calculate();
+    }
+}
+
+
+/* COPY RESULTS */
+
+function copyResults() {
+
+    if (lastResults.length === 0) {
+        return;
+    }
+
+
+    let text =
+        "♡ RALLY SYNC ♡\n\n";
+
+
+    lastResults.forEach(player => {
+
+        text +=
+            `${player.name} — ${player.time}\n`;
+
+    });
+
+
+    text +=
+        `\n✨ HIT TIME: ${
+            document.getElementById(
+                "hitTime"
+            ).textContent
+        }`;
+
+
+    /*
+       الطريقة الأولى:
+       navigator.clipboard
+    */
+
+    if (
+        navigator.clipboard &&
+        window.isSecureContext
+    ) {
+
+        navigator.clipboard.writeText(text)
+
+        .then(() => {
+
+            showCopied();
+
+        })
+
+        .catch(() => {
+
+            fallbackCopy(text);
+
+        });
+
+    } else {
+
+        fallbackCopy(text);
+
+    }
+}
+
+
+/* FALLBACK COPY */
+
+function fallbackCopy(text) {
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+    textarea.value = text;
+
+    textarea.setAttribute(
+        "readonly",
+        ""
+    );
+
+
+    textarea.style.position =
+        "fixed";
+
+    textarea.style.left =
+        "-9999px";
+
+    textarea.style.top =
+        "0";
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.focus();
+
+    textarea.select();
+
+    textarea.setSelectionRange(
+        0,
+        textarea.value.length
+    );
+
+
+    let success = false;
+
+
+    try {
+
+        success =
+            document.execCommand(
+                "copy"
+            );
+
+    } catch (e) {
+
+        success = false;
+
+    }
+
+
+    document.body.removeChild(
+        textarea
+    );
+
+
+    if (success) {
+
+        showCopied();
+
+    } else {
+
+        showManualCopy(text);
+
+    }
+}
+
+
+/* COPIED */
+
+function showCopied() {
+
+    const button =
+        document.querySelector(
+            ".copy"
+        );
+
+
+    const oldText =
+        button.textContent;
+
+
+    button.textContent =
+        "✓ COPIED! ✨";
+
 
     setTimeout(() => {
 
-      btn.textContent = old;
+        button.textContent =
+            oldText;
 
-    }, 1200);
-
-  } catch (e) {
-
-    const ta =
-      document.createElement("textarea");
-
-    ta.value = text;
-
-    document.body.appendChild(ta);
-
-    ta.select();
-
-    document.execCommand("copy");
-
-    ta.remove();
-
-    alert("Copied!");
-  }
+    }, 1500);
 }
 
-addPlayer("NOTA", "43");
-addPlayer("BIBI", "46");
-addPlayer("AHMED", "42");
-addPlayer("MOHAMED", "28");
-addPlayer("ALI", "33");
+
+/* MANUAL COPY WINDOW */
+
+function showManualCopy(text) {
+
+    const oldBox =
+        document.querySelector(
+            ".copyBox"
+        );
+
+    if (oldBox) {
+        oldBox.remove();
+    }
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+    box.className =
+        "copyBox";
+
+
+    box.innerHTML = `
+
+        <div style="
+            text-align:center;
+            color:#ff9ddd;
+            font-size:18px;
+            font-weight:bold;
+            margin-bottom:12px;
+        ">
+            ✨ Copy Results ✨
+        </div>
+
+        <textarea
+            id="manualCopyText"
+            readonly
+        ></textarea>
+
+        <button
+            class="closeCopy"
+            onclick="closeCopyBox()"
+        >
+            DONE ♡
+        </button>
+
+    `;
+
+
+    document.body.appendChild(box);
+
+
+    const textarea =
+        document.getElementById(
+            "manualCopyText"
+        );
+
+
+    textarea.value = text;
+
+    textarea.focus();
+
+    textarea.select();
+
+    textarea.setSelectionRange(
+        0,
+        textarea.value.length
+    );
+}
+
+
+/* CLOSE COPY BOX */
+
+function closeCopyBox() {
+
+    const box =
+        document.querySelector(
+            ".copyBox"
+        );
+
+    if (box) {
+        box.remove();
+    }
+}
+
+
+/* SECURITY */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
 
 </script>
 
