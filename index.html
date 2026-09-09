@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rally Sync ♡</title>
+<title>1997 ♡ NAP TEAM</title>
 
 <style>
 * {
@@ -14,20 +15,27 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background:
-        radial-gradient(circle at 20% 10%, #3b1635 0%, transparent 30%),
-        radial-gradient(circle at 80% 90%, #40133b 0%, transparent 30%),
-        #0d050c;
+    background: #0b030a;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
     overflow-x: hidden;
+    position: relative;
 }
 
-/* ✨ Sparkles */
-body::before,
-body::after {
-    content: "✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧";
+/* Background Canvas for meteors & glowing dynamic lights */
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Sparkles floating background decorative layer */
+.sparkle-layer {
     position: fixed;
     width: 100%;
     left: 0;
@@ -36,16 +44,17 @@ body::after {
     letter-spacing: 28px;
     opacity: .35;
     pointer-events: none;
+    z-index: 1;
     animation: sparkle 5s linear infinite;
 }
 
-body::before {
+.sparkle-layer.top {
     top: 8%;
 }
 
-body::after {
+.sparkle-layer.bottom {
     top: 75%;
-    animation-delay: 2s;
+    animation-delay: 2.5s;
 }
 
 @keyframes sparkle {
@@ -53,11 +62,9 @@ body::after {
         transform: translateX(-20px);
         opacity: .15;
     }
-
     50% {
         opacity: .7;
     }
-
     100% {
         transform: translateX(20px);
         opacity: .15;
@@ -67,48 +74,74 @@ body::after {
 .container {
     max-width: 720px;
     margin: auto;
+    position: relative;
+    z-index: 2;
 }
 
-/* HEADER */
+/* HEADER & DECORATIVE ANIMATED TITLE */
 
 h1 {
     text-align: center;
-    margin: 5px 0;
-    color: #ffb7e8;
-    font-size: 32px;
-    letter-spacing: 3px;
+    margin: 10px 0 2px 0;
+    font-size: 42px;
+    letter-spacing: 5px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ffb7e8, #ff4fc3, #ff8dd8, #ffb7e8);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 3s linear infinite, floatTitle 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 12px rgba(255, 79, 195, 0.8));
+}
 
-    text-shadow:
-        0 0 8px #ff4fc3,
-        0 0 20px #ff4fc3;
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+@keyframes floatTitle {
+    0% {
+        transform: translateY(0px) scale(1);
+    }
+    100% {
+        transform: translateY(-4px) scale(1.02);
+    }
 }
 
 .subtitle {
     text-align: center;
-    color: #d98ac4;
+    color: #ffd2f3;
+    font-size: 16px;
+    letter-spacing: 4px;
+    font-weight: bold;
     margin-bottom: 25px;
+    text-shadow: 0 0 8px #ff4fc3;
 }
 
 /* CARD */
 
 .card {
-    background: rgba(24, 8, 21, .94);
-    border: 1px solid #ff4fc3;
+    background: rgba(24, 8, 21, .88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 79, 195, 0.7);
     border-radius: 18px;
     padding: 18px;
     margin-bottom: 18px;
 
     box-shadow:
-        0 0 12px rgba(255, 79, 195, .25),
-        inset 0 0 20px rgba(255, 79, 195, .04);
+        0 0 15px rgba(255, 79, 195, .25),
+        inset 0 0 20px rgba(255, 79, 195, .05);
 }
 
-/* PLAYER INPUT */
+/* PLAYER INPUT ROWS */
 
 .row {
     display: grid;
-    grid-template-columns: 1fr 125px 42px 42px 42px;
-    gap: 7px;
+    grid-template-columns: 1fr 140px 42px;
+    gap: 8px;
     margin-bottom: 11px;
     align-items: center;
 }
@@ -116,22 +149,18 @@ h1 {
 input {
     width: 100%;
     padding: 12px;
-
     border-radius: 10px;
     border: 1px solid #71325f;
-
-    background: #170914;
+    background: rgba(23, 9, 20, 0.85);
     color: white;
-
     font-size: 16px;
     outline: none;
+    transition: 0.2s;
 }
 
 input:focus {
     border-color: #ff72ce;
-
-    box-shadow:
-        0 0 8px rgba(255, 114, 206, .35);
+    box-shadow: 0 0 8px rgba(255, 114, 206, .4);
 }
 
 /* BUTTONS */
@@ -139,50 +168,46 @@ input:focus {
 button {
     border: none;
     border-radius: 10px;
-
     padding: 11px;
-
     font-size: 15px;
     font-weight: bold;
-
     cursor: pointer;
-
     transition: .15s;
+    user-select: none;
 }
 
 button:active {
     transform: scale(.92);
 }
 
-/* +1 / -1 */
+/* +1 / -1 CONTROLS IN RESULTS */
 
-.plus,
-.minus {
+.adjust-btn {
     background: #35102d;
     color: #ff9cde;
-
     border: 1px solid #9d3b80;
-
-    box-shadow:
-        0 0 6px rgba(255, 80, 190, .2);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    box-shadow: 0 0 6px rgba(255, 80, 190, .2);
 }
 
-.plus:hover,
-.minus:hover {
+.adjust-btn:hover {
     background: #ff4fc3;
     color: #16000e;
-
-    box-shadow:
-        0 0 12px #ff4fc3;
+    box-shadow: 0 0 10px #ff4fc3;
 }
 
-/* DELETE */
+/* DELETE BUTTON */
 
 .delete {
     background: #24101f;
     color: #ff6f9d;
-
     border: 1px solid #6c294f;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .delete:hover {
@@ -190,16 +215,13 @@ button:active {
     color: #21000f;
 }
 
-/* ADD */
+/* ADD BUTTON */
 
 .add {
     width: 100%;
-
-    background: #241021;
+    background: rgba(36, 16, 33, 0.9);
     color: #ffb7e8;
-
     border: 1px solid #8e3976;
-
     margin-top: 5px;
 }
 
@@ -207,34 +229,22 @@ button:active {
     background: #32142e;
 }
 
-/* CALCULATE */
+/* CALCULATE BUTTON */
 
 .calculate {
     width: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ff4fc3,
-            #ff8dd8
-        );
-
+    background: linear-gradient(90deg, #ff4fc3, #ff8dd8);
     color: #210018;
-
     margin-top: 10px;
-
     font-size: 17px;
-
-    box-shadow:
-        0 0 15px rgba(255, 79, 195, .4);
+    box-shadow: 0 0 15px rgba(255, 79, 195, .4);
 }
 
 .calculate:hover {
-    box-shadow:
-        0 0 25px rgba(255, 79, 195, .7);
+    box-shadow: 0 0 25px rgba(255, 79, 195, .75);
 }
 
-/* RESULT */
+/* RESULTS LAYOUT */
 
 .result {
     display: none;
@@ -242,69 +252,54 @@ button:active {
 
 .hit {
     text-align: center;
-
     font-size: 23px;
     font-weight: bold;
-
     margin-bottom: 18px;
     padding: 15px;
-
     border: 1px solid #ff6dcc;
     border-radius: 12px;
-
     color: #ff9ddd;
-
-    background:
-        rgba(255, 79, 195, .06);
-
-    text-shadow:
-        0 0 10px #ff4fc3;
+    background: rgba(255, 79, 195, .08);
+    text-shadow: 0 0 10px #ff4fc3;
 }
 
 .result-row {
     display: grid;
-
-    grid-template-columns: 1fr 120px;
-
-    gap: 10px;
-
-    padding: 13px 8px;
-
-    border-bottom:
-        1px solid #3b1834;
-
+    grid-template-columns: 1fr 110px 88px;
+    gap: 8px;
+    padding: 10px 6px;
+    border-bottom: 1px solid #3b1834;
     align-items: center;
 }
 
 .result-header {
     color: #a96c9b;
     font-size: 13px;
+    font-weight: bold;
 }
 
 .time {
     color: #ff91d8;
-
     font-weight: bold;
-
     text-align: center;
-
-    text-shadow:
-        0 0 7px #ff4fc3;
+    font-size: 18px;
+    text-shadow: 0 0 7px #ff4fc3;
 }
 
-/* COPY */
+.time-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+/* COPY BUTTON & BOX */
 
 .copy {
     width: 100%;
-
-    background: #291024;
-
+    background: rgba(41, 16, 36, 0.9);
     color: #ff9ddd;
-
     border: 1px solid #a23d83;
-
     margin-top: 15px;
-
     font-size: 17px;
 }
 
@@ -313,63 +308,38 @@ button:active {
     color: #210018;
 }
 
-/* COPY BOX */
-
 .copyBox {
     position: fixed;
-
     left: 50%;
     top: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
+    transform: translate(-50%, -50%);
     width: 90%;
     max-width: 500px;
-
     background: #170914;
-
     border: 2px solid #ff4fc3;
-
     border-radius: 15px;
-
     padding: 18px;
-
     z-index: 9999;
-
-    box-shadow:
-        0 0 30px rgba(255, 79, 195, .5);
+    box-shadow: 0 0 30px rgba(255, 79, 195, .6);
 }
 
 .copyBox textarea {
     width: 100%;
-
     min-height: 180px;
-
     resize: none;
-
     padding: 12px;
-
     border-radius: 10px;
-
     border: 1px solid #a23d83;
-
     background: #0d050c;
-
     color: #ffb7e8;
-
     font-size: 16px;
-
     outline: none;
 }
 
 .closeCopy {
     width: 100%;
-
     margin-top: 10px;
-
     background: #ff4fc3;
-
     color: #210018;
 }
 
@@ -377,42 +347,41 @@ button:active {
 
 .footer {
     text-align: center;
-
-    color: #8c557e;
-
-    font-size: 12px;
-
+    color: #b0699f;
+    font-size: 13px;
     margin-top: 20px;
+    text-shadow: 0 0 5px rgba(255, 79, 195, 0.3);
 }
 
-/* MOBILE */
+/* MOBILE ADAPTATION */
 
 @media (max-width: 550px) {
-
     body {
         padding: 12px;
     }
 
     h1 {
-        font-size: 27px;
+        font-size: 32px;
     }
 
     .row {
-        grid-template-columns:
-            1fr 82px 36px 36px 36px;
-
+        grid-template-columns: 1fr 95px 36px;
         gap: 5px;
     }
 
-    .row button {
-        padding: 10px 4px;
+    .result-row {
+        grid-template-columns: 1fr 80px 80px;
+        gap: 4px;
+        font-size: 14px;
     }
 
-    .result-row {
-        grid-template-columns:
-            1fr 85px;
+    .time {
+        font-size: 16px;
+    }
 
-        font-size: 14px;
+    .adjust-btn {
+        padding: 5px 6px;
+        font-size: 12px;
     }
 }
 </style>
@@ -420,164 +389,53 @@ button:active {
 
 <body>
 
+<canvas id="bgCanvas"></canvas>
+
+<div class="sparkle-layer top">✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧</div>
+<div class="sparkle-layer bottom">✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧</div>
+
 <div class="container">
 
-    <h1>  1997  </h1>
-
-    <div class="subtitle">
-          SVS TOOLS
-    </div>
-
+    <!-- HEADER WITH DECORATIVE TITLE & SUBTITLE -->
+    <h1>✧ 𝟣𝟫𝟫𝟩 ✧</h1>
+    <div class="subtitle">NAP TEAM</div>
 
     <!-- INPUT CARD -->
-
     <div class="card">
-
         <div id="players">
-
             <div class="row">
-
-                <input
-                    type="text"
-                    placeholder="Player name"
-                    oninput="autoCalculate()"
-                >
-
-                <input
-                    type="number"
-                    placeholder="Seconds"
-                    min="0"
-                    oninput="autoCalculate()"
-                >
-
-                <button
-                    class="minus"
-                    onclick="changeTime(this, -1)"
-                >
-                    −1
-                </button>
-
-                <button
-                    class="plus"
-                    onclick="changeTime(this, 1)"
-                >
-                    +1
-                </button>
-
-                <button
-                    class="delete"
-                    onclick="removePlayer(this)"
-                >
-                    ×
-                </button>
-
+                <input type="text" placeholder="Player name" oninput="autoCalculate()">
+                <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
+                <button class="delete" onclick="removePlayer(this)">×</button>
             </div>
 
-
             <div class="row">
-
-                <input
-                    type="text"
-                    placeholder="Player name"
-                    oninput="autoCalculate()"
-                >
-
-                <input
-                    type="number"
-                    placeholder="Seconds"
-                    min="0"
-                    oninput="autoCalculate()"
-                >
-
-                <button
-                    class="minus"
-                    onclick="changeTime(this, -1)"
-                >
-                    −1
-                </button>
-
-                <button
-                    class="plus"
-                    onclick="changeTime(this, 1)"
-                >
-                    +1
-                </button>
-
-                <button
-                    class="delete"
-                    onclick="removePlayer(this)"
-                >
-                    ×
-                </button>
-
+                <input type="text" placeholder="Player name" oninput="autoCalculate()">
+                <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
+                <button class="delete" onclick="removePlayer(this)">×</button>
             </div>
-
         </div>
 
-
-        <button
-            class="add"
-            onclick="addPlayer()"
-        >
-            ✨ ＋ Add Player ✨
-        </button>
-
-
-        <button
-            class="calculate"
-            onclick="calculate()"
-        >
-            💗 CALCULATE 💗
-        </button>
-
+        <button class="add" onclick="addPlayer()">✨ ＋ Add Player ✨</button>
+        <button class="calculate" onclick="calculate()">💗 CALCULATE 💗</button>
     </div>
 
-
-    <!-- RESULTS -->
-
-    <div
-        class="card result"
-        id="result"
-    >
-
+    <!-- RESULTS CARD -->
+    <div class="card result" id="result">
         <div class="hit">
-
-            ✨ HIT TIME:
-
-            <span id="hitTime">
-                00:00
-            </span>
-
-            ✨
-
+            ✨ HIT TIME: <span id="hitTime">00:00</span> ✨
         </div>
-
 
         <div class="result-row result-header">
-
-            <div>
-                PLAYER
-            </div>
-
-            <div style="text-align:center">
-                START
-            </div>
-
+            <div>PLAYER</div>
+            <div style="text-align:center">START</div>
+            <div style="text-align:right">ADJUST</div>
         </div>
-
 
         <div id="results"></div>
 
-
-        <button
-            class="copy"
-            onclick="copyResults()"
-        >
-            📋 COPY RESULTS
-        </button>
-
+        <button class="copy" onclick="copyResults()">📋 COPY RESULTS</button>
     </div>
-
 
     <div class="footer">
         ♡ Made for synchronized rallies ♡
@@ -585,577 +443,445 @@ button:active {
 
 </div>
 
-
 <script>
 
-let lastResults = [];
+/* ==========================================================================
+   DYNAMIC BACKGROUND ANIMATION ENGINE (Pink Top/Bottom Glow & Pink Meteors)
+   ========================================================================== */
 
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
 
-/* ADD PLAYER */
+let width, height;
 
+function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function drawTopBottomGlow() {
+    // Top Pink Glow Anchor
+    const topGrad = ctx.createRadialGradient(
+        width / 2, 0, 10,
+        width / 2, 0, Math.max(width * 0.7, 350)
+    );
+    topGrad.addColorStop(0, 'rgba(255, 79, 195, 0.45)');
+    topGrad.addColorStop(0.5, 'rgba(255, 114, 206, 0.22)');
+    topGrad.addColorStop(1, 'transparent');
+
+    ctx.fillStyle = topGrad;
+    ctx.beginPath();
+    ctx.arc(width / 2, 0, Math.max(width * 0.7, 350), 0, Math.PI * 2);
+    ctx.fill();
+
+    // Bottom Magenta Glow Anchor
+    const bottomGrad = ctx.createRadialGradient(
+        width / 2, height, 10,
+        width / 2, height, Math.max(width * 0.7, 380)
+    );
+    bottomGrad.addColorStop(0, 'rgba(255, 79, 195, 0.4)');
+    bottomGrad.addColorStop(0.5, 'rgba(215, 48, 160, 0.2)');
+    bottomGrad.addColorStop(1, 'transparent');
+
+    ctx.fillStyle = bottomGrad;
+    ctx.beginPath();
+    ctx.arc(width / 2, height, Math.max(width * 0.7, 380), 0, Math.PI * 2);
+    ctx.fill();
+}
+
+class GlowOrb {
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = Math.random() * 160 + 100;
+        this.vx = (Math.random() - 0.5) * 0.9;
+        this.vy = (Math.random() - 0.5) * 0.9;
+        this.hue = Math.random() * 30 + 310; // Pink / Magenta range (310 - 340)
+        this.alpha = Math.random() * 0.2 + 0.15;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -100 || this.x > width + 100) this.vx *= -1;
+        if (this.y < -100 || this.y > height + 100) this.vy *= -1;
+    }
+
+    draw() {
+        const gradient = ctx.createRadialGradient(
+            this.x, this.y, 0,
+            this.x, this.y, this.radius
+        );
+        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 75%, ${this.alpha})`);
+        gradient.addColorStop(0.6, `hsla(${this.hue}, 100%, 55%, ${this.alpha * 0.4})`);
+        gradient.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+class Meteor {
+    constructor() {
+        this.reset(true);
+    }
+
+    reset(initial = false) {
+        this.x = Math.random() * (width + 400);
+        this.y = -60 - Math.random() * 150;
+        this.length = Math.random() * 80 + 60;
+        // Significantly reduced speed so meteors float slowly down
+        this.speed = Math.random() * 1.8 + 1.2; 
+        this.angle = (Math.PI / 4) + (Math.random() - 0.5) * 0.2; // ~45 deg diagonal
+        this.thickness = Math.random() * 2.2 + 1;
+        this.opacity = Math.random() * 0.85 + 0.25;
+        this.active = false;
+        // Low initial delay to maintain high meteor density on screen
+        this.delay = initial ? Math.random() * 120 : Math.random() * 40;
+    }
+
+    update() {
+        if (!this.active) {
+            if (this.delay <= 0) {
+                this.active = true;
+            } else {
+                this.delay--;
+                return;
+            }
+        }
+
+        this.x -= Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+
+        // Reset immediately once out of bounds
+        if (this.y > height + 100 || this.x < -100) {
+            this.reset(false);
+        }
+    }
+
+    draw() {
+        if (!this.active) return;
+
+        const tailX = this.x + Math.cos(this.angle) * this.length;
+        const tailY = this.y - Math.sin(this.angle) * this.length;
+
+        const grad = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
+        grad.addColorStop(0.2, `rgba(255, 114, 206, ${this.opacity * 0.9})`);
+        grad.addColorStop(1, 'transparent');
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = this.thickness;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+
+        // Glowing white-pink head point
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#ff4fc3';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.thickness, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+}
+
+// Initialize Background Effects with 22 slow & dense meteors
+const orbs = Array.from({ length: 8 }, () => new GlowOrb());
+const meteors = Array.from({ length: 22 }, () => new Meteor());
+
+function renderBackground() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw Top & Bottom Pink Glow Anchors
+    drawTopBottomGlow();
+
+    // Render moving ambient glow orbs
+    orbs.forEach(orb => {
+        orb.update();
+        orb.draw();
+    });
+
+    // Render slow, high-density stream of pink meteors
+    meteors.forEach(meteor => {
+        meteor.update();
+        meteor.draw();
+    });
+
+    requestAnimationFrame(renderBackground);
+}
+
+/* ==========================================================================
+   RALLY CALCULATOR APPLICATION LOGIC
+   ========================================================================== */
+
+let computedPlayers = [];
+let maxHitDuration = 0;
+
+/* ADD PLAYER INPUT ROW */
 function addPlayer() {
-
-    const players =
-        document.getElementById("players");
-
-    const row =
-        document.createElement("div");
-
+    const players = document.getElementById("players");
+    const row = document.createElement("div");
     row.className = "row";
-
     row.innerHTML = `
-
-        <input
-            type="text"
-            placeholder="Player name"
-            oninput="autoCalculate()"
-        >
-
-        <input
-            type="number"
-            placeholder="Seconds"
-            min="0"
-            oninput="autoCalculate()"
-        >
-
-        <button
-            class="minus"
-            onclick="changeTime(this, -1)"
-        >
-            −1
-        </button>
-
-        <button
-            class="plus"
-            onclick="changeTime(this, 1)"
-        >
-            +1
-        </button>
-
-        <button
-            class="delete"
-            onclick="removePlayer(this)"
-        >
-            ×
-        </button>
+        <input type="text" placeholder="Player name" oninput="autoCalculate()">
+        <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
+        <button class="delete" onclick="removePlayer(this)">×</button>
     `;
-
     players.appendChild(row);
 }
 
-
-/* DELETE PLAYER */
-
+/* REMOVE PLAYER INPUT ROW */
 function removePlayer(button) {
-
-    const rows =
-        document.querySelectorAll(
-            "#players .row"
-        );
-
+    const rows = document.querySelectorAll("#players .row");
     if (rows.length <= 1) {
         return;
     }
-
     button.parentElement.remove();
-
     autoCalculate();
 }
 
-
-/* +1 / -1 */
-
-function changeTime(button, amount) {
-
-    const input =
-        button.parentElement.children[1];
-
-    let value =
-        Number(input.value) || 0;
-
-    value += amount;
-
-    if (value < 0) {
-        value = 0;
-    }
-
-    input.value = value;
-
-    calculate();
-}
-
-
-/* FORMAT TIME */
-
+/* FORMAT TIME (SECONDS -> MM:SS) */
 function formatTime(seconds) {
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const secs =
-        seconds % 60;
-
+    if (seconds < 0) seconds = 0;
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
     return (
-        String(minutes).padStart(2, "0")
-        +
-        ":"
-        +
+        String(minutes).padStart(2, "0") +
+        ":" +
         String(secs).padStart(2, "0")
     );
 }
 
-
-/* CALCULATE */
-
+/* MAIN CALCULATION FUNCTION */
 function calculate() {
-
-    const rows =
-        document.querySelectorAll(
-            "#players .row"
-        );
-
-    let players = [];
-
+    const rows = document.querySelectorAll("#players .row");
+    let inputData = [];
 
     rows.forEach(row => {
+        const name = row.children[0].value.trim();
+        const seconds = Number(row.children[1].value);
 
-        const name =
-            row.children[0]
-                .value
-                .trim();
-
-        const seconds =
-            Number(
-                row.children[1].value
-            );
-
-
-        if (
-            name !== "" &&
-            !isNaN(seconds) &&
-            seconds >= 0
-        ) {
-
-            players.push({
-
+        if (name !== "" && !isNaN(seconds) && seconds >= 0) {
+            inputData.push({
                 name: name,
-
                 duration: seconds
-
             });
-
         }
-
     });
 
-
-    if (players.length === 0) {
-
-        document.getElementById(
-            "result"
-        ).style.display = "none";
-
+    if (inputData.length === 0) {
+        document.getElementById("result").style.display = "none";
+        computedPlayers = [];
         return;
     }
 
+    /* Longest travel duration sets Hit Time */
+    maxHitDuration = Math.max(...inputData.map(p => p.duration));
 
-    /*
-       أطول مسيرة تبدأ عند 00:00
+    /* Sort by longest duration first */
+    inputData.sort((a, b) => b.duration - a.duration);
 
-       Start =
-       Longest - Player Duration
-    */
-
-    const longest =
-        Math.max(
-            ...players.map(
-                player =>
-                    player.duration
-            )
-        );
-
-
-    /* الأطول أولاً */
-
-    players.sort(
-        (a, b) =>
-            b.duration - a.duration
-    );
-
-
-    const results =
-        document.getElementById(
-            "results"
-        );
-
-    results.innerHTML = "";
-
-    lastResults = [];
-
-
-    players.forEach(player => {
-
-        const startTime =
-            longest -
-            player.duration;
-
-
-        lastResults.push({
-
+    /* Initialize result model with base calculated start times */
+    computedPlayers = inputData.map((player, index) => {
+        const initialStart = maxHitDuration - player.duration;
+        return {
+            id: index,
             name: player.name,
-
-            time:
-                formatTime(startTime)
-
-        });
-
-
-        const row =
-            document.createElement("div");
-
-        row.className =
-            "result-row";
-
-
-        row.innerHTML = `
-
-            <div>
-                ♡ ${escapeHTML(player.name)}
-            </div>
-
-            <div class="time">
-                ${formatTime(startTime)}
-            </div>
-
-        `;
-
-
-        results.appendChild(row);
-
+            duration: player.duration,
+            startTime: initialStart
+        };
     });
 
-
-    document.getElementById(
-        "hitTime"
-    ).textContent =
-        formatTime(longest);
-
-
-    document.getElementById(
-        "result"
-    ).style.display = "block";
+    renderResults();
+    document.getElementById("result").style.display = "block";
 }
 
+/* RENDER RESULTS WITH ADJUSTMENT BUTTONS */
+function renderResults() {
+    const resultsContainer = document.getElementById("results");
+    resultsContainer.innerHTML = "";
 
-/* AUTO CALCULATE */
+    computedPlayers.forEach((player, idx) => {
+        const row = document.createElement("div");
+        row.className = "result-row";
 
-function autoCalculate() {
+        row.innerHTML = `
+            <div>♡ ${escapeHTML(player.name)}</div>
+            <div class="time" id="time-display-${idx}">${formatTime(player.startTime)}</div>
+            <div class="time-actions">
+                <button class="adjust-btn" onclick="adjustResultTime(${idx}, -1)">−1</button>
+                <button class="adjust-btn" onclick="adjustResultTime(${idx}, 1)">+1</button>
+            </div>
+        `;
 
-    const rows =
-        document.querySelectorAll(
-            "#players .row"
-        );
-
-    let hasData = false;
-
-
-    rows.forEach(row => {
-
-        const name =
-            row.children[0]
-                .value
-                .trim();
-
-        const seconds =
-            Number(
-                row.children[1].value
-            );
-
-
-        if (
-            name !== "" &&
-            !isNaN(seconds)
-        ) {
-
-            hasData = true;
-
-        }
-
+        resultsContainer.appendChild(row);
     });
 
+    document.getElementById("hitTime").textContent = formatTime(maxHitDuration);
+}
+
+/* ADJUST START TIME FOR A SPECIFIC RESULT ROW */
+function adjustResultTime(index, amount) {
+    if (computedPlayers[index]) {
+        computedPlayers[index].startTime += amount;
+        if (computedPlayers[index].startTime < 0) {
+            computedPlayers[index].startTime = 0;
+        }
+        
+        // Update specific time display in UI
+        const displayEl = document.getElementById(`time-display-${index}`);
+        if (displayEl) {
+            displayEl.textContent = formatTime(computedPlayers[index].startTime);
+        }
+    }
+}
+
+/* AUTO CALCULATE WHEN TYPING */
+function autoCalculate() {
+    const rows = document.querySelectorAll("#players .row");
+    let hasData = false;
+
+    rows.forEach(row => {
+        const name = row.children[0].value.trim();
+        const seconds = Number(row.children[1].value);
+
+        if (name !== "" && !isNaN(seconds)) {
+            hasData = true;
+        }
+    });
 
     if (hasData) {
         calculate();
     }
 }
 
-
-/* COPY RESULTS */
-
+/* COPY FORMATTED RESULTS */
 function copyResults() {
-
-    if (lastResults.length === 0) {
+    if (computedPlayers.length === 0) {
         return;
     }
 
+    let text = "♡ 1997 - NAP TEAM ♡\n\n";
 
-    let text =
-        "♡ RALLY SYNC ♡\n\n";
-
-
-    lastResults.forEach(player => {
-
-        text +=
-            `${player.name} — ${player.time}\n`;
-
+    computedPlayers.forEach(player => {
+        text += `${player.name} — ${formatTime(player.startTime)}\n`;
     });
 
+    text += `\n✨ HIT TIME: ${document.getElementById("hitTime").textContent}`;
 
-    text +=
-        `\n✨ HIT TIME: ${
-            document.getElementById(
-                "hitTime"
-            ).textContent
-        }`;
-
-
-    /*
-       الطريقة الأولى:
-       navigator.clipboard
-    */
-
-    if (
-        navigator.clipboard &&
-        window.isSecureContext
-    ) {
-
+    if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text)
-
         .then(() => {
-
             showCopied();
-
         })
-
         .catch(() => {
-
             fallbackCopy(text);
-
         });
-
     } else {
-
         fallbackCopy(text);
-
     }
 }
 
-
-/* FALLBACK COPY */
-
+/* FALLBACK COPY METHOD */
 function fallbackCopy(text) {
-
-    const textarea =
-        document.createElement(
-            "textarea"
-        );
-
-
+    const textarea = document.createElement("textarea");
     textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.top = "0";
 
-    textarea.setAttribute(
-        "readonly",
-        ""
-    );
-
-
-    textarea.style.position =
-        "fixed";
-
-    textarea.style.left =
-        "-9999px";
-
-    textarea.style.top =
-        "0";
-
-    document.body.appendChild(
-        textarea
-    );
-
-
+    document.body.appendChild(textarea);
     textarea.focus();
-
     textarea.select();
-
-    textarea.setSelectionRange(
-        0,
-        textarea.value.length
-    );
-
+    textarea.setSelectionRange(0, textarea.value.length);
 
     let success = false;
-
-
     try {
-
-        success =
-            document.execCommand(
-                "copy"
-            );
-
+        success = document.execCommand("copy");
     } catch (e) {
-
         success = false;
-
     }
 
-
-    document.body.removeChild(
-        textarea
-    );
-
+    document.body.removeChild(textarea);
 
     if (success) {
-
         showCopied();
-
     } else {
-
         showManualCopy(text);
-
     }
 }
 
-
-/* COPIED */
-
+/* SHOW COPIED FEEDBACK */
 function showCopied() {
-
-    const button =
-        document.querySelector(
-            ".copy"
-        );
-
-
-    const oldText =
-        button.textContent;
-
-
-    button.textContent =
-        "✓ COPIED! ✨";
-
+    const button = document.querySelector(".copy");
+    const oldText = button.textContent;
+    button.textContent = "✓ COPIED! ✨";
 
     setTimeout(() => {
-
-        button.textContent =
-            oldText;
-
+        button.textContent = oldText;
     }, 1500);
 }
 
-
-/* MANUAL COPY WINDOW */
-
+/* MANUAL COPY MODAL IF CLIPBOARD IS BLOCKED */
 function showManualCopy(text) {
-
-    const oldBox =
-        document.querySelector(
-            ".copyBox"
-        );
-
+    const oldBox = document.querySelector(".copyBox");
     if (oldBox) {
         oldBox.remove();
     }
 
-
-    const box =
-        document.createElement(
-            "div"
-        );
-
-    box.className =
-        "copyBox";
-
+    const box = document.createElement("div");
+    box.className = "copyBox";
 
     box.innerHTML = `
-
-        <div style="
-            text-align:center;
-            color:#ff9ddd;
-            font-size:18px;
-            font-weight:bold;
-            margin-bottom:12px;
-        ">
+        <div style="text-align:center; color:#ff9ddd; font-size:18px; font-weight:bold; margin-bottom:12px;">
             ✨ Copy Results ✨
         </div>
-
-        <textarea
-            id="manualCopyText"
-            readonly
-        ></textarea>
-
-        <button
-            class="closeCopy"
-            onclick="closeCopyBox()"
-        >
-            DONE ♡
-        </button>
-
+        <textarea id="manualCopyText" readonly></textarea>
+        <button class="closeCopy" onclick="closeCopyBox()">DONE ♡</button>
     `;
-
 
     document.body.appendChild(box);
 
-
-    const textarea =
-        document.getElementById(
-            "manualCopyText"
-        );
-
-
+    const textarea = document.getElementById("manualCopyText");
     textarea.value = text;
-
     textarea.focus();
-
     textarea.select();
-
-    textarea.setSelectionRange(
-        0,
-        textarea.value.length
-    );
+    textarea.setSelectionRange(0, textarea.value.length);
 }
 
-
-/* CLOSE COPY BOX */
-
+/* CLOSE MANUAL COPY MODAL */
 function closeCopyBox() {
-
-    const box =
-        document.querySelector(
-            ".copyBox"
-        );
-
+    const box = document.querySelector(".copyBox");
     if (box) {
         box.remove();
     }
 }
 
-
-/* SECURITY */
-
+/* HTML SANITIZATION */
 function escapeHTML(text) {
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
+    const div = document.createElement("div");
     div.textContent = text;
-
     return div.innerHTML;
 }
 
+// Start background animation loop on window load
+window.onload = function() {
+    renderBackground();
+};
 </script>
-
 </body>
-</html>
+</html> 
