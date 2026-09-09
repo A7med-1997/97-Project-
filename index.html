@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTC March Sync Calculator</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #eef8ff;
+  padding: 20px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+}
+
+.card {
+  background: #000;
+  border: 1px solid #00bfff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow:
+    0 0 18px #00bfff44,
+    inset 0 0 20px #00bfff0d;
+}
+
+h1 {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.sub {
+  text-align: center;
+  color: #9fc2d6;
+  margin-bottom: 18px;
+}
+
+.clock {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 2px;
+
+  background: #000;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 18px;
+
+  text-shadow: 0 0 10px #00bfff;
+}
+
+label {
+  display: block;
+  margin: 10px 0 6px;
+  color: #b9d6e6;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 130px 45px;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+
+  border-radius: 9px;
+  border: 1px solid #315a70;
+
+  background: #000;
+  color: white;
+
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 8px #00bfff44;
+}
+
+button {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 14px;
+
+  font-size: 15px;
+  font-weight: bold;
+
+  cursor: pointer;
+  color: white;
+  background: #176b91;
+}
+
+button:hover {
+  filter: brightness(1.15);
+}
+
+.remove {
+  background: #8c3040;
+  padding: 0;
+  font-size: 18px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.actions button {
+  flex: 1;
+  min-width: 130px;
+}
+
+.calculate {
+  background: #13855f;
+}
+
+.copy {
+  background: #8a6916;
+}
+
+.result {
+  margin-top: 18px;
+
+  background: #000;
+  border: 1px solid #00bfff;
+
+  border-radius: 12px;
+  padding: 15px;
+
+  display: none;
+
+  box-shadow: 0 0 12px #00bfff22;
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+
+  font-family: Consolas, monospace;
+  font-size: 17px;
+  line-height: 1.65;
+
+  color: #00bfff;
+  text-shadow: 0 0 7px #00bfff;
+}
+
+.info {
+  font-size: 13px;
+  color: #8eafc0;
+  text-align: center;
+  margin-top: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <h1>🌐 UTC March Sync Calculator</h1>
+
+    <div class="sub">
+      Set the arrival time automatically to the next full UTC minute
+    </div>
+
+    <div class="clock" id="clock">
+      00:00:00 UTC
+    </div>
+
+    <label>
+      Players & March Duration
+    </label>
+
+    <div id="players"></div>
+
+    <div class="actions">
+
+      <button onclick="addPlayer()">
+        ＋ Add Player
+      </button>
+
+      <button class="calculate" onclick="calculate()">
+        ⚡ Calculate
+      </button>
+
+    </div>
+
+    <div class="result" id="resultBox">
+
+      <pre id="results"></pre>
+
+      <div class="actions">
+
+        <button class="copy" onclick="copyResults()">
+          📋 Copy Results
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="info">
+      Format: 00.SS • Examples: 00.15, 00.26
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const players = document.getElementById("players");
+
+function addPlayer(name = "", march = "") {
+
+  const row = document.createElement("div");
+
+  row.className = "row";
+
+  row.innerHTML = `
+    <input
+      class="name"
+      placeholder="Player name"
+      value="${escapeHtml(name)}"
+    >
+
+    <input
+      class="march"
+      type="number"
+      min="0"
+      max="3600"
+      placeholder="Seconds"
+      value="${march}"
+    >
+
+    <button
+      class="remove"
+      onclick="this.parentElement.remove()"
+    >
+      ×
+    </button>
+  `;
+
+  players.appendChild(row);
+}
+
+function escapeHtml(s) {
+
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function updateClock() {
+
+  const now = new Date();
+
+  const h = now.getUTCHours()
+    .toString()
+    .padStart(2, "0");
+
+  const m = now.getUTCMinutes()
+    .toString()
+    .padStart(2, "0");
+
+  const s = now.getUTCSeconds()
+    .toString()
+    .padStart(2, "0");
+
+  document.getElementById("clock").textContent =
+    `${h}:${m}:${s} UTC`;
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+function calculate() {
+
+  const rows = [
+    ...document.querySelectorAll(".row")
+  ];
+
+  if (!rows.length) {
+
+    alert("Add at least one player.");
+
+    return;
+  }
+
+  const now = new Date();
+
+  const target = new Date(now);
+
+  target.setUTCSeconds(0, 0);
+
+  target.setUTCMinutes(
+    target.getUTCMinutes() + 1
+  );
+
+  let output = [];
+
+  for (const row of rows) {
+
+    const name =
+      row.querySelector(".name")
+        .value
+        .trim();
+
+    const march =
+      parseInt(
+        row.querySelector(".march").value,
+        10
+      );
+
+    if (!name) {
+      continue;
+    }
+
+    if (!Number.isFinite(march) || march < 0) {
+
+      alert(
+        `Enter a valid march time for ${name}.`
+      );
+
+      return;
+    }
+
+    const launch = new Date(
+      target.getTime() - march * 1000
+    );
+
+    const ss =
+      launch
+        .getUTCSeconds()
+        .toString()
+        .padStart(2, "0");
+
+    output.push(
+      `${name.padEnd(10, " ")} 00.${ss}`
+    );
+  }
+
+  if (!output.length) {
+
+    alert(
+      "Enter at least one player name."
+    );
+
+    return;
+  }
+
+  document.getElementById("results")
+    .textContent =
+    output.join("\n");
+
+  document.getElementById("resultBox")
+    .style.display = "block";
+}
+
+async function copyResults() {
+
+  const text =
+    document.getElementById("results")
+      .textContent;
+
+  try {
+
+    await navigator.clipboard.writeText(text);
+
+    const btn =
+      document.querySelector(".copy");
+
+    const old =
+      btn.textContent;
+
+    btn.textContent =
+      "✅ Copied!";
+
+    setTimeout(() => {
+
+      btn.textContent = old;
+
+    }, 1200);
+
+  } catch (e) {
+
+    const ta =
+      document.createElement("textarea");
+
+    ta.value = text;
+
+    document.body.appendChild(ta);
+
+    ta.select();
+
+    document.execCommand("copy");
+
+    ta.remove();
+
+    alert("Copied!");
+  }
+}
+
+addPlayer("NOTA", "43");
+addPlayer("BIBI", "46");
+addPlayer("AHMED", "42");
+addPlayer("MOHAMED", "28");
+addPlayer("ALI", "33");
+
+</script>
+
+</body>
+</html>
