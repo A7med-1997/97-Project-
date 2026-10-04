@@ -1,887 +1,750 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Timing Tools / أدوات توقيت التحالف</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<title>1997 ♡ NAP TEAM</title>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px 15px;
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-}
+        .main-wrapper {
+            width: 100%;
+            max-width: 500px;
+        }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: #0b030a;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 20px;
-    overflow-x: hidden;
-    position: relative;
-}
+        /* BANNER / MOTIVATIONAL QUOTE */
+        .quote-banner {
+            background: linear-gradient(135deg, rgba(255, 107, 129, 0.08), rgba(255, 71, 87, 0.03));
+            border: 1px solid rgba(255, 107, 129, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
 
-/* Background Canvas for meteors & glowing dynamic lights */
-#bgCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-}
+        .quote-banner:hover {
+            border-color: rgba(255, 107, 129, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.15);
+        }
 
-/* Sparkles floating background decorative layer */
-.sparkle-layer {
-    position: fixed;
-    width: 100%;
-    left: 0;
-    color: #ff9de2;
-    font-size: 18px;
-    letter-spacing: 28px;
-    opacity: .35;
-    pointer-events: none;
-    z-index: 1;
-    animation: sparkle 5s linear infinite;
-}
+        .quote-text {
+            color: #d1d8e0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            font-style: italic;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
 
-.sparkle-layer.top {
-    top: 8%;
-}
+        .quote-tag {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: #ff6b81;
+            font-weight: 700;
+            font-style: normal;
+            letter-spacing: 1px;
+        }
 
-.sparkle-layer.bottom {
-    top: 75%;
-    animation-delay: 2.5s;
-}
+        /* HEADER & LANGUAGE SWITCHER */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
 
-@keyframes sparkle {
-    0% {
-        transform: translateX(-20px);
-        opacity: .15;
-    }
-    50% {
-        opacity: .7;
-    }
-    100% {
-        transform: translateX(20px);
-        opacity: .15;
-    }
-}
+        .lang-btn {
+            background: #252525;
+            color: #ff6b81;
+            border: 1px solid #444;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            width: auto;
+        }
 
-.container {
-    max-width: 720px;
-    margin: auto;
-    position: relative;
-    z-index: 2;
-}
+        .lang-btn:hover {
+            background: #ff4757;
+            color: #fff;
+        }
 
-/* HEADER & DECORATIVE ANIMATED TITLE */
+        /* NAVIGATION TABS */
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: #1e1e1e;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
 
-h1 {
-    text-align: center;
-    margin: 10px 0 2px 0;
-    font-size: 42px;
-    letter-spacing: 5px;
-    font-weight: 800;
-    background: linear-gradient(90deg, #ffb7e8, #ff4fc3, #ff8dd8, #ffb7e8);
-    background-size: 200% auto;
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: shine 3s linear infinite, floatTitle 3s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 12px rgba(255, 79, 195, 0.8));
-}
+        .tab-btn {
+            flex: 1;
+            padding: 10px 5px;
+            background: transparent;
+            color: #aaa;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
 
-@keyframes shine {
-    to {
-        background-position: 200% center;
-    }
-}
+        .tab-btn:hover {
+            color: #fff;
+            background: #282828;
+        }
 
-@keyframes floatTitle {
-    0% {
-        transform: translateY(0px) scale(1);
-    }
-    100% {
-        transform: translateY(-4px) scale(1.02);
-    }
-}
+        .tab-btn.active {
+            background: #ff4757;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+        }
 
-.subtitle {
-    text-align: center;
-    color: #ffd2f3;
-    font-size: 16px;
-    letter-spacing: 4px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    text-shadow: 0 0 8px #ff4fc3;
-}
+        /* CONTAINER & CARDS */
+        .container {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            display: none;
+        }
 
-/* CARD */
+        .container.active {
+            display: block;
+        }
 
-.card {
-    background: rgba(24, 8, 21, .88);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 79, 195, 0.7);
-    border-radius: 18px;
-    padding: 18px;
-    margin-bottom: 18px;
+        h2 {
+            text-align: center;
+            color: #ff4757;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
 
-    box-shadow:
-        0 0 15px rgba(255, 79, 195, .25),
-        inset 0 0 20px rgba(255, 79, 195, .05);
-}
+        .section-title {
+            color: #ff6b81;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
 
-/* PLAYER INPUT ROWS */
+        /* INPUT GROUPS */
+        .input-group {
+            margin-bottom: 15px;
+            background: #252525;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
 
-.row {
-    display: grid;
-    grid-template-columns: 1fr 140px 42px;
-    gap: 8px;
-    margin-bottom: 11px;
-    align-items: center;
-}
+        .time-inputs {
+            display: flex;
+            gap: 10px;
+        }
 
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #71325f;
-    background: rgba(23, 9, 20, 0.85);
-    color: white;
-    font-size: 16px;
-    outline: none;
-    transition: 0.2s;
-}
+        .time-field {
+            flex: 1;
+        }
 
-input:focus {
-    border-color: #ff72ce;
-    box-shadow: 0 0 8px rgba(255, 114, 206, .4);
-}
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+            font-size: 0.85rem;
+        }
 
-/* BUTTONS */
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: 0.2s;
+        }
 
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 11px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .15s;
-    user-select: none;
-}
+        input:focus {
+            border-color: #ff4757;
+        }
 
-button:active {
-    transform: scale(.92);
-}
+        /* BUTTONS */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
+        }
 
-/* +1 / -1 CONTROLS IN RESULTS */
+        button:hover {
+            background-color: #ff6b81;
+        }
 
-.adjust-btn {
-    background: #35102d;
-    color: #ff9cde;
-    border: 1px solid #9d3b80;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    box-shadow: 0 0 6px rgba(255, 80, 190, .2);
-}
+        button:active {
+            transform: scale(0.98);
+        }
 
-.adjust-btn:hover {
-    background: #ff4fc3;
-    color: #16000e;
-    box-shadow: 0 0 10px #ff4fc3;
-}
+        .btn-add {
+            background: #252525;
+            color: #ff6b81;
+            border: 1px solid #444;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
 
-/* DELETE BUTTON */
+        .btn-add:hover {
+            background: #303030;
+            color: #ff4757;
+        }
 
-.delete {
-    background: #24101f;
-    color: #ff6f9d;
-    border: 1px solid #6c294f;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .btn-delete {
+            background: #2a1517;
+            color: #ff4757;
+            border: 1px solid #5a1e24;
+            padding: 0;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border-radius: 8px;
+        }
 
-.delete:hover {
-    background: #ff4f8b;
-    color: #21000f;
-}
+        .btn-delete:hover {
+            background: #ff4757;
+            color: #fff;
+        }
 
-/* ADD BUTTON */
+        /* DYNAMIC ROWS FOR TOOL 2 */
+        .player-row {
+            display: grid;
+            grid-template-columns: 1fr 110px 42px;
+            gap: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
 
-.add {
-    width: 100%;
-    background: rgba(36, 16, 33, 0.9);
-    color: #ffb7e8;
-    border: 1px solid #8e3976;
-    margin-top: 5px;
-}
+        /* RESULTS BOX */
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #252525;
+            border: 1px solid #333;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: none;
+            line-height: 1.6;
+        }
 
-.add:hover {
-    background: #32142e;
-}
+        .alert-time {
+            color: #2ed573;
+            font-size: 1.4rem;
+            display: block;
+            margin-top: 5px;
+        }
 
-/* CALCULATE BUTTON */
+        .alert-warning {
+            color: #ffa502;
+        }
 
-.calculate {
-    width: 100%;
-    background: linear-gradient(90deg, #ff4fc3, #ff8dd8);
-    color: #210018;
-    margin-top: 10px;
-    font-size: 17px;
-    box-shadow: 0 0 15px rgba(255, 79, 195, .4);
-}
+        /* TEAM RESULT STYLES */
+        .hit-banner {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #ff4757;
+            border-radius: 8px;
+            color: #2ed573;
+            background: rgba(46, 213, 115, 0.05);
+        }
 
-.calculate:hover {
-    box-shadow: 0 0 25px rgba(255, 79, 195, .75);
-}
+        .result-row {
+            display: grid;
+            grid-template-columns: 1fr 80px 80px;
+            gap: 8px;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            align-items: center;
+            font-size: 0.95rem;
+        }
 
-/* RESULTS LAYOUT */
+        .result-header {
+            color: #888;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
 
-.result {
-    display: none;
-}
+        .time-val {
+            color: #ff4757;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1rem;
+        }
 
-.hit {
-    text-align: center;
-    font-size: 23px;
-    font-weight: bold;
-    margin-bottom: 18px;
-    padding: 15px;
-    border: 1px solid #ff6dcc;
-    border-radius: 12px;
-    color: #ff9ddd;
-    background: rgba(255, 79, 195, .08);
-    text-shadow: 0 0 10px #ff4fc3;
-}
+        .time-actions {
+            display: flex;
+            gap: 4px;
+            justify-content: flex-end;
+        }
 
-.result-row {
-    display: grid;
-    grid-template-columns: 1fr 110px 88px;
-    gap: 8px;
-    padding: 10px 6px;
-    border-bottom: 1px solid #3b1834;
-    align-items: center;
-}
+        .adjust-btn {
+            background: #1a1a1a;
+            color: #ff6b81;
+            border: 1px solid #444;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            width: auto;
+        }
 
-.result-header {
-    color: #a96c9b;
-    font-size: 13px;
-    font-weight: bold;
-}
+        .adjust-btn:hover {
+            background: #ff4757;
+            color: #fff;
+        }
 
-.time {
-    color: #ff91d8;
-    font-weight: bold;
-    text-align: center;
-    font-size: 18px;
-    text-shadow: 0 0 7px #ff4fc3;
-}
+        .btn-copy {
+            background: #252525;
+            border: 1px solid #ff4757;
+            color: #ff4757;
+            margin-top: 15px;
+        }
 
-.time-actions {
-    display: flex;
-    gap: 5px;
-    justify-content: flex-end;
-}
+        .btn-copy:hover {
+            background: #ff4757;
+            color: #fff;
+        }
 
-/* COPY BUTTON & BOX */
-
-.copy {
-    width: 100%;
-    background: rgba(41, 16, 36, 0.9);
-    color: #ff9ddd;
-    border: 1px solid #a23d83;
-    margin-top: 15px;
-    font-size: 17px;
-}
-
-.copy:hover {
-    background: #ff4fc3;
-    color: #210018;
-}
-
-.copyBox {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 500px;
-    background: #170914;
-    border: 2px solid #ff4fc3;
-    border-radius: 15px;
-    padding: 18px;
-    z-index: 9999;
-    box-shadow: 0 0 30px rgba(255, 79, 195, .6);
-}
-
-.copyBox textarea {
-    width: 100%;
-    min-height: 180px;
-    resize: none;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #a23d83;
-    background: #0d050c;
-    color: #ffb7e8;
-    font-size: 16px;
-    outline: none;
-}
-
-.closeCopy {
-    width: 100%;
-    margin-top: 10px;
-    background: #ff4fc3;
-    color: #210018;
-}
-
-/* FOOTER */
-
-.footer {
-    text-align: center;
-    color: #b0699f;
-    font-size: 13px;
-    margin-top: 20px;
-    text-shadow: 0 0 5px rgba(255, 79, 195, 0.3);
-}
-
-/* MOBILE ADAPTATION */
-
-@media (max-width: 550px) {
-    body {
-        padding: 12px;
-    }
-
-    h1 {
-        font-size: 32px;
-    }
-
-    .row {
-        grid-template-columns: 1fr 95px 36px;
-        gap: 5px;
-    }
-
-    .result-row {
-        grid-template-columns: 1fr 80px 80px;
-        gap: 4px;
-        font-size: 14px;
-    }
-
-    .time {
-        font-size: 16px;
-    }
-
-    .adjust-btn {
-        padding: 5px 6px;
-        font-size: 12px;
-    }
-}
-</style>
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+    </style>
 </head>
-
 <body>
 
-<canvas id="bgCanvas"></canvas>
+    <div class="main-wrapper">
+        <!-- TOP BAR FOR LANGUAGE TOGGLE -->
+        <div class="top-bar">
+            <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">🌐 English</button>
+        </div>
 
-<div class="sparkle-layer top">✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧</div>
-<div class="sparkle-layer bottom">✦  ✧  ✦  ✧  ✦  ✧  ✦  ✧</div>
+        <!-- MOTIVATIONAL QUOTE BANNER -->
+        <div class="quote-banner">
+            <div class="quote-text">"Don't push yourself too hard. Just do your best and don't worry about the outcome."</div>
+            <div class="quote-tag">— 1997 —</div>
+        </div>
 
-<div class="container">
+        <!-- NAVIGATION TABS -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" id="tab1Btn" onclick="switchTab('tool1')">🛡️ وقت التعزيز</button>
+            <button class="tab-btn" id="tab2Btn" onclick="switchTab('tool2')">⚔️ وقت الرالي</button>
+        </div>
 
-    <!-- HEADER WITH DECORATIVE TITLE & SUBTITLE -->
-    <h1>✧ 𝟣𝟫𝟫𝟩 ✧</h1>
-    <div class="subtitle">NAP TEAM</div>
+        <!-- TOOL 1: REINFORCE TIMING (وقت التعزيز) -->
+        <div id="tool1" class="container active">
+            <h2 id="tool1Title">🛡️ وقت التعزيز</h2>
 
-    <!-- INPUT CARD -->
-    <div class="card">
-        <div id="players">
-            <div class="row">
-                <input type="text" placeholder="Player name" oninput="autoCalculate()">
-                <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
-                <button class="delete" onclick="removePlayer(this)">×</button>
+            <div class="input-group">
+                <div class="section-title" id="enemySectionTitle">🎯 مسيرة الخصم / الرالي:</div>
+                <div class="time-inputs">
+                    <div class="time-field">
+                        <label class="lbl-min">الدقائق</label>
+                        <input type="number" id="enemyMin" value="0" min="0">
+                    </div>
+                    <div class="time-field">
+                        <label class="lbl-sec">الثواني</label>
+                        <input type="number" id="enemySec" placeholder="30" min="0">
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-                <input type="text" placeholder="Player name" oninput="autoCalculate()">
-                <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
-                <button class="delete" onclick="removePlayer(this)">×</button>
+            <div class="input-group">
+                <div class="section-title" id="mySectionTitle">🛡️ مسيرتك:</div>
+                <div class="time-inputs">
+                    <div class="time-field">
+                        <label class="lbl-min">الدقائق</label>
+                        <input type="number" id="myMin" value="0" min="0">
+                    </div>
+                    <div class="time-field">
+                        <label class="lbl-sec">الثواني</label>
+                        <input type="number" id="mySec" placeholder="40" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <button id="calcBtn1" onclick="calculateTiming()">حساب التوقيت</button>
+
+            <div class="result-box" id="resultBox1"></div>
+        </div>
+
+        <!-- TOOL 2: RALLY MULTI-PLAYER TIMING (وقت الرالي) -->
+        <div id="tool2" class="container">
+            <h2 id="tool2Title">⚔️ وقت الرالي</h2>
+
+            <div id="playersList">
+                <div class="player-row">
+                    <input type="text" class="input-player-name" placeholder="اسم اللاعب" oninput="autoCalculateTeam()">
+                    <input type="number" class="input-player-sec" placeholder="الثواني" min="0" oninput="autoCalculateTeam()">
+                    <button class="btn-delete" onclick="removePlayer(this)">×</button>
+                </div>
+                <div class="player-row">
+                    <input type="text" class="input-player-name" placeholder="اسم اللاعب" oninput="autoCalculateTeam()">
+                    <input type="number" class="input-player-sec" placeholder="الثواني" min="0" oninput="autoCalculateTeam()">
+                    <button class="btn-delete" onclick="removePlayer(this)">×</button>
+                </div>
+            </div>
+
+            <button class="btn-add" id="btnAddPlayer" onclick="addPlayer()">+ إضافة لاعب</button>
+            <button id="calcBtn2" onclick="calculateTeam()">حساب التوقيت</button>
+
+            <div class="result-box" id="resultBox2">
+                <div class="hit-banner">
+                    <span id="hitTimeText">🎯 وقت وصول الضربة:</span> <span id="hitTime">00:00</span>
+                </div>
+
+                <div class="result-row result-header">
+                    <div id="hdrPlayer" style="text-align: right;">اللاعب</div>
+                    <div id="hdrLaunch">الانطلاق</div>
+                    <div id="hdrAdjust" style="text-align: left;">تعديل</div>
+                </div>
+
+                <div id="teamResults"></div>
+
+                <button class="btn-copy" id="btnCopyResults" onclick="copyTeamResults()">📋 نسخ النتائج</button>
             </div>
         </div>
 
-        <button class="add" onclick="addPlayer()">✨ ＋ Add Player ✨</button>
-        <button class="calculate" onclick="calculate()">💗 CALCULATE 💗</button>
-    </div>
-
-    <!-- RESULTS CARD -->
-    <div class="card result" id="result">
-        <div class="hit">
-            ✨ HIT TIME: <span id="hitTime">00:00</span> ✨
+        <div class="footer">
+            Whiteout Survival Alliance Tools
         </div>
-
-        <div class="result-row result-header">
-            <div>PLAYER</div>
-            <div style="text-align:center">START</div>
-            <div style="text-align:right">ADJUST</div>
-        </div>
-
-        <div id="results"></div>
-
-        <button class="copy" onclick="copyResults()">📋 COPY RESULTS</button>
     </div>
 
-    <div class="footer">
-        ♡ Made for synchronized rallies ♡
-    </div>
+    <script>
+        let currentLang = 'ar';
 
-</div>
+        const i18n = {
+            ar: {
+                langBtn: '🌐 English',
+                tab1: '🛡️ وقت التعزيز',
+                tab2: '⚔️ وقت الرالي',
+                tool1Title: '🛡️ وقت التعزيز',
+                tool2Title: '⚔️ وقت الرالي',
+                enemySection: '🎯 مسيرة الخصم / الرالي:',
+                mySection: '🛡️ مسيرتك:',
+                minLabel: 'الدقائق',
+                secLabel: 'الثواني',
+                calcBtn: 'حساب التوقيت',
+                invalidTime: 'يرجى إدخال وقت صحيح أكبر من الصفر!',
+                launchAlert: (t) => `انطلق عندما يتبقى لمسيرة الخصم ${t} قبل الوصول`,
+                launchSame: 'انطلق في نفس وقت انطلاق الخصم تماماً!',
+                launchEarly: (t) => `يجب أن تنطلق قبل انطلاق الرالي بـ ${t}`,
+                minWord: 'دقيقة',
+                secWord: 'ثانية',
+                andWord: 'و',
+                playerNamePh: 'اسم اللاعب',
+                playerSecPh: 'الثواني',
+                addPlayer: '+ إضافة لاعب',
+                hitTimeText: '🎯 وقت وصول الضربة:',
+                hdrPlayer: 'اللاعب',
+                hdrLaunch: 'الانطلاق',
+                hdrAdjust: 'تعديل',
+                copyBtn: '📋 نسخ النتائج',
+                copiedBtn: '✓ تم النسخ!',
+                copyHeader: '⚔️ توقيت انطلاق الرالي ⚔️\n\n',
+                copyHitTime: '🎯 وقت وصول الضربة: '
+            },
+            en: {
+                langBtn: '🌐 العربية',
+                tab1: '🛡️ Reinforce Time',
+                tab2: '⚔️ Rally Time',
+                tool1Title: '🛡️ Reinforce Time',
+                tool2Title: '⚔️ Rally Time',
+                enemySection: '🎯 Enemy / Rally March:',
+                mySection: '🛡️ Your March:',
+                minLabel: 'Minutes',
+                secLabel: 'Seconds',
+                calcBtn: 'Calculate Timing',
+                invalidTime: 'Please enter a valid time greater than zero!',
+                launchAlert: (t) => `Launch when enemy march has ${t} remaining`,
+                launchSame: 'Launch at the exact same time as the enemy!',
+                launchEarly: (t) => `You must launch ${t} before the rally starts`,
+                minWord: 'min',
+                secWord: 'sec',
+                andWord: '&',
+                playerNamePh: 'Player Name',
+                playerSecPh: 'Seconds',
+                addPlayer: '+ Add Player',
+                hitTimeText: '🎯 Hit Time:',
+                hdrPlayer: 'Player',
+                hdrLaunch: 'Launch',
+                hdrAdjust: 'Adjust',
+                copyBtn: '📋 Copy Results',
+                copiedBtn: '✓ Copied!',
+                copyHeader: '⚔️ Rally Launch Timings ⚔️\n\n',
+                copyHitTime: '🎯 Hit Time: '
+            }
+        };
 
-<script>
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLang);
+            updateUI();
+        }
 
-/* ==========================================================================
-   DYNAMIC BACKGROUND ANIMATION ENGINE (Pink Top/Bottom Glow & Pink Meteors)
-   ========================================================================== */
+        function updateUI() {
+            const t = i18n[currentLang];
 
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
+            document.getElementById('langBtn').textContent = t.langBtn;
+            document.getElementById('tab1Btn').textContent = t.tab1;
+            document.getElementById('tab2Btn').textContent = t.tab2;
+            document.getElementById('tool1Title').textContent = t.tool1Title;
+            document.getElementById('tool2Title').textContent = t.tool2Title;
+            document.getElementById('enemySectionTitle').textContent = t.enemySection;
+            document.getElementById('mySectionTitle').textContent = t.mySection;
+            document.getElementById('calcBtn1').textContent = t.calcBtn;
+            document.getElementById('calcBtn2').textContent = t.calcBtn;
+            document.getElementById('btnAddPlayer').textContent = t.addPlayer;
+            document.getElementById('hitTimeText').textContent = t.hitTimeText;
+            document.getElementById('hdrPlayer').textContent = t.hdrPlayer;
+            document.getElementById('hdrLaunch').textContent = t.hdrLaunch;
+            document.getElementById('hdrAdjust').textContent = t.hdrAdjust;
+            document.getElementById('btnCopyResults').textContent = t.copyBtn;
 
-let width, height;
+            document.querySelectorAll('.lbl-min').forEach(el => el.textContent = t.minLabel);
+            document.querySelectorAll('.lbl-sec').forEach(el => el.textContent = t.secLabel);
+            document.querySelectorAll('.input-player-name').forEach(el => el.placeholder = t.playerNamePh);
+            document.querySelectorAll('.input-player-sec').forEach(el => el.placeholder = t.playerSecPh);
 
-function resizeCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+            const align = currentLang === 'ar' ? 'right' : 'left';
+            const oppAlign = currentLang === 'ar' ? 'left' : 'right';
+            document.getElementById('hdrPlayer').style.textAlign = align;
+            document.getElementById('hdrAdjust').style.textAlign = oppAlign;
 
-function drawTopBottomGlow() {
-    // Top Pink Glow Anchor
-    const topGrad = ctx.createRadialGradient(
-        width / 2, 0, 10,
-        width / 2, 0, Math.max(width * 0.7, 350)
-    );
-    topGrad.addColorStop(0, 'rgba(255, 79, 195, 0.45)');
-    topGrad.addColorStop(0.5, 'rgba(255, 114, 206, 0.22)');
-    topGrad.addColorStop(1, 'transparent');
+            if (document.getElementById('resultBox1').style.display === 'block') calculateTiming();
+            if (document.getElementById('resultBox2').style.display === 'block') renderTeamResults();
+        }
 
-    ctx.fillStyle = topGrad;
-    ctx.beginPath();
-    ctx.arc(width / 2, 0, Math.max(width * 0.7, 350), 0, Math.PI * 2);
-    ctx.fill();
+        /* TAB SWITCHING LOGIC */
+        function switchTab(tabId) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 
-    // Bottom Magenta Glow Anchor
-    const bottomGrad = ctx.createRadialGradient(
-        width / 2, height, 10,
-        width / 2, height, Math.max(width * 0.7, 380)
-    );
-    bottomGrad.addColorStop(0, 'rgba(255, 79, 195, 0.4)');
-    bottomGrad.addColorStop(0.5, 'rgba(215, 48, 160, 0.2)');
-    bottomGrad.addColorStop(1, 'transparent');
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-    ctx.fillStyle = bottomGrad;
-    ctx.beginPath();
-    ctx.arc(width / 2, height, Math.max(width * 0.7, 380), 0, Math.PI * 2);
-    ctx.fill();
-}
+        /* TOOL 1: REINFORCE TIMING LOGIC */
+        function formatTimeTool1(seconds) {
+            const t = i18n[currentLang];
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            if (mins > 0) {
+                return `${mins} ${t.minWord} ${t.andWord} ${secs} ${t.secWord}`;
+            }
+            return `${secs} ${t.secWord}`;
+        }
 
-class GlowOrb {
-    constructor() {
-        this.reset();
-    }
+        function calculateTiming() {
+            const t = i18n[currentLang];
+            const enemyMin = parseFloat(document.getElementById('enemyMin').value) || 0;
+            const enemySec = parseFloat(document.getElementById('enemySec').value) || 0;
+            const myMin = parseFloat(document.getElementById('myMin').value) || 0;
+            const mySec = parseFloat(document.getElementById('mySec').value) || 0;
 
-    reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.radius = Math.random() * 160 + 100;
-        this.vx = (Math.random() - 0.5) * 0.9;
-        this.vy = (Math.random() - 0.5) * 0.9;
-        this.hue = Math.random() * 30 + 310; // Pink / Magenta range (310 - 340)
-        this.alpha = Math.random() * 0.2 + 0.15;
-    }
+            const resultBox = document.getElementById('resultBox1');
+            const totalEnemyTime = (enemyMin * 60) + enemySec;
+            const totalMyTime = (myMin * 60) + mySec;
 
-    update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < -100 || this.x > width + 100) this.vx *= -1;
-        if (this.y < -100 || this.y > height + 100) this.vy *= -1;
-    }
-
-    draw() {
-        const gradient = ctx.createRadialGradient(
-            this.x, this.y, 0,
-            this.x, this.y, this.radius
-        );
-        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 75%, ${this.alpha})`);
-        gradient.addColorStop(0.6, `hsla(${this.hue}, 100%, 55%, ${this.alpha * 0.4})`);
-        gradient.addColorStop(1, 'transparent');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
-
-class Meteor {
-    constructor() {
-        this.reset(true);
-    }
-
-    reset(initial = false) {
-        this.x = Math.random() * (width + 400);
-        this.y = -60 - Math.random() * 150;
-        this.length = Math.random() * 80 + 60;
-        // Significantly reduced speed so meteors float slowly down
-        this.speed = Math.random() * 1.8 + 1.2; 
-        this.angle = (Math.PI / 4) + (Math.random() - 0.5) * 0.2; // ~45 deg diagonal
-        this.thickness = Math.random() * 2.2 + 1;
-        this.opacity = Math.random() * 0.85 + 0.25;
-        this.active = false;
-        // Low initial delay to maintain high meteor density on screen
-        this.delay = initial ? Math.random() * 120 : Math.random() * 40;
-    }
-
-    update() {
-        if (!this.active) {
-            if (this.delay <= 0) {
-                this.active = true;
-            } else {
-                this.delay--;
+            if (totalEnemyTime <= 0 || totalMyTime <= 0) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `<span class="alert-warning">${t.invalidTime}</span>`;
                 return;
+            }
+
+            const launchAt = totalEnemyTime - totalMyTime;
+            resultBox.style.display = 'block';
+
+            if (launchAt > 0) {
+                resultBox.innerHTML = `<span class="alert-time">${t.launchAlert(formatTimeTool1(launchAt))}</span>`;
+            } else if (launchAt === 0) {
+                resultBox.innerHTML = `<span class="alert-time">${t.launchSame}</span>`;
+            } else {
+                resultBox.innerHTML = `<span class="alert-time">${t.launchEarly(formatTimeTool1(Math.abs(launchAt)))}</span>`;
             }
         }
 
-        this.x -= Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
+        /* TOOL 2: RALLY MULTI-PLAYER LOGIC */
+        let computedPlayers = [];
+        let maxHitDuration = 0;
 
-        // Reset immediately once out of bounds
-        if (this.y > height + 100 || this.x < -100) {
-            this.reset(false);
+        function addPlayer() {
+            const t = i18n[currentLang];
+            const list = document.getElementById("playersList");
+            const row = document.createElement("div");
+            row.className = "player-row";
+            row.innerHTML = `
+                <input type="text" class="input-player-name" placeholder="${t.playerNamePh}" oninput="autoCalculateTeam()">
+                <input type="number" class="input-player-sec" placeholder="${t.playerSecPh}" min="0" oninput="autoCalculateTeam()">
+                <button class="btn-delete" onclick="removePlayer(this)">×</button>
+            `;
+            list.appendChild(row);
         }
-    }
 
-    draw() {
-        if (!this.active) return;
+        function removePlayer(button) {
+            const rows = document.querySelectorAll("#playersList .player-row");
+            if (rows.length <= 1) return;
+            button.parentElement.remove();
+            autoCalculateTeam();
+        }
 
-        const tailX = this.x + Math.cos(this.angle) * this.length;
-        const tailY = this.y - Math.sin(this.angle) * this.length;
+        function formatTimeMMSS(seconds) {
+            if (seconds < 0) seconds = 0;
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+        }
 
-        const grad = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
-        grad.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
-        grad.addColorStop(0.2, `rgba(255, 114, 206, ${this.opacity * 0.9})`);
-        grad.addColorStop(1, 'transparent');
+        function calculateTeam() {
+            const rows = document.querySelectorAll("#playersList .player-row");
+            let inputData = [];
 
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = this.thickness;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(tailX, tailY);
-        ctx.stroke();
+            rows.forEach(row => {
+                const name = row.children[0].value.trim();
+                const seconds = Number(row.children[1].value);
+                if (name !== "" && !isNaN(seconds) && seconds >= 0) {
+                    inputData.push({ name, duration: seconds });
+                }
+            });
 
-        // Glowing white-pink head point
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#ff4fc3';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.thickness, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-    }
-}
+            if (inputData.length === 0) {
+                document.getElementById("resultBox2").style.display = "none";
+                computedPlayers = [];
+                return;
+            }
 
-// Initialize Background Effects with 22 slow & dense meteors
-const orbs = Array.from({ length: 8 }, () => new GlowOrb());
-const meteors = Array.from({ length: 22 }, () => new Meteor());
+            maxHitDuration = Math.max(...inputData.map(p => p.duration));
+            inputData.sort((a, b) => b.duration - a.duration);
 
-function renderBackground() {
-    ctx.clearRect(0, 0, width, height);
+            computedPlayers = inputData.map((player, index) => ({
+                id: index,
+                name: player.name,
+                duration: player.duration,
+                startTime: maxHitDuration - player.duration
+            }));
 
-    // Draw Top & Bottom Pink Glow Anchors
-    drawTopBottomGlow();
+            renderTeamResults();
+            document.getElementById("resultBox2").style.display = "block";
+        }
 
-    // Render moving ambient glow orbs
-    orbs.forEach(orb => {
-        orb.update();
-        orb.draw();
-    });
+        function renderTeamResults() {
+            const container = document.getElementById("teamResults");
+            container.innerHTML = "";
+            const align = currentLang === 'ar' ? 'right' : 'left';
 
-    // Render slow, high-density stream of pink meteors
-    meteors.forEach(meteor => {
-        meteor.update();
-        meteor.draw();
-    });
+            computedPlayers.forEach((player, idx) => {
+                const row = document.createElement("div");
+                row.className = "result-row";
+                row.innerHTML = `
+                    <div style="text-align: ${align};">${escapeHTML(player.name)}</div>
+                    <div class="time-val" id="team-time-${idx}">${formatTimeMMSS(player.startTime)}</div>
+                    <div class="time-actions">
+                        <button class="adjust-btn" onclick="adjustTeamTime(${idx}, -1)">-1</button>
+                        <button class="adjust-btn" onclick="adjustTeamTime(${idx}, 1)">+1</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
 
-    requestAnimationFrame(renderBackground);
-}
+            document.getElementById("hitTime").textContent = formatTimeMMSS(maxHitDuration);
+        }
 
-/* ==========================================================================
-   RALLY CALCULATOR APPLICATION LOGIC
-   ========================================================================== */
+        function adjustTeamTime(index, amount) {
+            if (computedPlayers[index]) {
+                computedPlayers[index].startTime += amount;
+                if (computedPlayers[index].startTime < 0) computedPlayers[index].startTime = 0;
+                
+                const displayEl = document.getElementById(`team-time-${index}`);
+                if (displayEl) displayEl.textContent = formatTimeMMSS(computedPlayers[index].startTime);
+            }
+        }
 
-let computedPlayers = [];
-let maxHitDuration = 0;
+        function autoCalculateTeam() {
+            const rows = document.querySelectorAll("#playersList .player-row");
+            let hasData = false;
+            rows.forEach(row => {
+                if (row.children[0].value.trim() !== "" && !isNaN(Number(row.children[1].value))) {
+                    hasData = true;
+                }
+            });
+            if (hasData) calculateTeam();
+        }
 
-/* ADD PLAYER INPUT ROW */
-function addPlayer() {
-    const players = document.getElementById("players");
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-        <input type="text" placeholder="Player name" oninput="autoCalculate()">
-        <input type="number" placeholder="Seconds" min="0" oninput="autoCalculate()">
-        <button class="delete" onclick="removePlayer(this)">×</button>
-    `;
-    players.appendChild(row);
-}
+        function copyTeamResults() {
+            if (computedPlayers.length === 0) return;
+            const t = i18n[currentLang];
 
-/* REMOVE PLAYER INPUT ROW */
-function removePlayer(button) {
-    const rows = document.querySelectorAll("#players .row");
-    if (rows.length <= 1) {
-        return;
-    }
-    button.parentElement.remove();
-    autoCalculate();
-}
+            let text = t.copyHeader;
+            computedPlayers.forEach(p => {
+                text += `${p.name} — ${formatTimeMMSS(p.startTime)}\n`;
+            });
+            text += `\n${t.copyHitTime}${document.getElementById("hitTime").textContent}`;
 
-/* FORMAT TIME (SECONDS -> MM:SS) */
-function formatTime(seconds) {
-    if (seconds < 0) seconds = 0;
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return (
-        String(minutes).padStart(2, "0") +
-        ":" +
-        String(secs).padStart(2, "0")
-    );
-}
-
-/* MAIN CALCULATION FUNCTION */
-function calculate() {
-    const rows = document.querySelectorAll("#players .row");
-    let inputData = [];
-
-    rows.forEach(row => {
-        const name = row.children[0].value.trim();
-        const seconds = Number(row.children[1].value);
-
-        if (name !== "" && !isNaN(seconds) && seconds >= 0) {
-            inputData.push({
-                name: name,
-                duration: seconds
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById("btnCopyResults");
+                const old = btn.textContent;
+                btn.textContent = t.copiedBtn;
+                setTimeout(() => btn.textContent = old, 1500);
             });
         }
-    });
 
-    if (inputData.length === 0) {
-        document.getElementById("result").style.display = "none";
-        computedPlayers = [];
-        return;
-    }
-
-    /* Longest travel duration sets Hit Time */
-    maxHitDuration = Math.max(...inputData.map(p => p.duration));
-
-    /* Sort by longest duration first */
-    inputData.sort((a, b) => b.duration - a.duration);
-
-    /* Initialize result model with base calculated start times */
-    computedPlayers = inputData.map((player, index) => {
-        const initialStart = maxHitDuration - player.duration;
-        return {
-            id: index,
-            name: player.name,
-            duration: player.duration,
-            startTime: initialStart
-        };
-    });
-
-    renderResults();
-    document.getElementById("result").style.display = "block";
-}
-
-/* RENDER RESULTS WITH ADJUSTMENT BUTTONS */
-function renderResults() {
-    const resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = "";
-
-    computedPlayers.forEach((player, idx) => {
-        const row = document.createElement("div");
-        row.className = "result-row";
-
-        row.innerHTML = `
-            <div>♡ ${escapeHTML(player.name)}</div>
-            <div class="time" id="time-display-${idx}">${formatTime(player.startTime)}</div>
-            <div class="time-actions">
-                <button class="adjust-btn" onclick="adjustResultTime(${idx}, -1)">−1</button>
-                <button class="adjust-btn" onclick="adjustResultTime(${idx}, 1)">+1</button>
-            </div>
-        `;
-
-        resultsContainer.appendChild(row);
-    });
-
-    document.getElementById("hitTime").textContent = formatTime(maxHitDuration);
-}
-
-/* ADJUST START TIME FOR A SPECIFIC RESULT ROW */
-function adjustResultTime(index, amount) {
-    if (computedPlayers[index]) {
-        computedPlayers[index].startTime += amount;
-        if (computedPlayers[index].startTime < 0) {
-            computedPlayers[index].startTime = 0;
+        function escapeHTML(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
         }
-        
-        // Update specific time display in UI
-        const displayEl = document.getElementById(`time-display-${index}`);
-        if (displayEl) {
-            displayEl.textContent = formatTime(computedPlayers[index].startTime);
-        }
-    }
-}
-
-/* AUTO CALCULATE WHEN TYPING */
-function autoCalculate() {
-    const rows = document.querySelectorAll("#players .row");
-    let hasData = false;
-
-    rows.forEach(row => {
-        const name = row.children[0].value.trim();
-        const seconds = Number(row.children[1].value);
-
-        if (name !== "" && !isNaN(seconds)) {
-            hasData = true;
-        }
-    });
-
-    if (hasData) {
-        calculate();
-    }
-}
-
-/* COPY FORMATTED RESULTS */
-function copyResults() {
-    if (computedPlayers.length === 0) {
-        return;
-    }
-
-    let text = "♡ 1997 - NAP TEAM ♡\n\n";
-
-    computedPlayers.forEach(player => {
-        text += `${player.name} — ${formatTime(player.startTime)}\n`;
-    });
-
-    text += `\n✨ HIT TIME: ${document.getElementById("hitTime").textContent}`;
-
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text)
-        .then(() => {
-            showCopied();
-        })
-        .catch(() => {
-            fallbackCopy(text);
-        });
-    } else {
-        fallbackCopy(text);
-    }
-}
-
-/* FALLBACK COPY METHOD */
-function fallbackCopy(text) {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "fixed";
-    textarea.style.left = "-9999px";
-    textarea.style.top = "0";
-
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
-    textarea.setSelectionRange(0, textarea.value.length);
-
-    let success = false;
-    try {
-        success = document.execCommand("copy");
-    } catch (e) {
-        success = false;
-    }
-
-    document.body.removeChild(textarea);
-
-    if (success) {
-        showCopied();
-    } else {
-        showManualCopy(text);
-    }
-}
-
-/* SHOW COPIED FEEDBACK */
-function showCopied() {
-    const button = document.querySelector(".copy");
-    const oldText = button.textContent;
-    button.textContent = "✓ COPIED! ✨";
-
-    setTimeout(() => {
-        button.textContent = oldText;
-    }, 1500);
-}
-
-/* MANUAL COPY MODAL IF CLIPBOARD IS BLOCKED */
-function showManualCopy(text) {
-    const oldBox = document.querySelector(".copyBox");
-    if (oldBox) {
-        oldBox.remove();
-    }
-
-    const box = document.createElement("div");
-    box.className = "copyBox";
-
-    box.innerHTML = `
-        <div style="text-align:center; color:#ff9ddd; font-size:18px; font-weight:bold; margin-bottom:12px;">
-            ✨ Copy Results ✨
-        </div>
-        <textarea id="manualCopyText" readonly></textarea>
-        <button class="closeCopy" onclick="closeCopyBox()">DONE ♡</button>
-    `;
-
-    document.body.appendChild(box);
-
-    const textarea = document.getElementById("manualCopyText");
-    textarea.value = text;
-    textarea.focus();
-    textarea.select();
-    textarea.setSelectionRange(0, textarea.value.length);
-}
-
-/* CLOSE MANUAL COPY MODAL */
-function closeCopyBox() {
-    const box = document.querySelector(".copyBox");
-    if (box) {
-        box.remove();
-    }
-}
-
-/* HTML SANITIZATION */
-function escapeHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Start background animation loop on window load
-window.onload = function() {
-    renderBackground();
-};
-</script>
+    </script>
 </body>
-</html> 
+</html>
